@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RetrofitFrame.iml" filepath="$PROJECT_DIR$/RetrofitFrame.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bftvmiddleware/bftvmiddleware.iml" filepath="$PROJECT_DIR$/bftvmiddleware/bftvmiddleware.iml" />
       <module fileurl="file://$PROJECT_DIR$/retorifitlib/retorifitlib.iml" filepath="$PROJECT_DIR$/retorifitlib/retorifitlib.iml" />
     </modules>
   </component>
