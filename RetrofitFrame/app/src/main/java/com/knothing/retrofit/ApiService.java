@@ -15,7 +15,7 @@ import rx.Observable;
  */
 public interface ApiService {
 
-    @GET(ApiMethods.LOGIN)
+    @POST(ApiMethods.LOGIN)
     Observable<UserInfo> login(@Query("username") String username, @Query("password") String password);
 
     @FormUrlEncoded
