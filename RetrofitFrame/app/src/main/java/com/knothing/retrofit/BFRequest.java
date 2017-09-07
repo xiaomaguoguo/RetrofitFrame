@@ -38,10 +38,6 @@ public class BFRequest {
 
     public static BFRequest getInstance() {
 
-        if(!isInit){
-            throw new IllegalStateException("请先在Application里面调用BFRequest.init()初始化网络请求框架! ! ! ");
-        }
-
         if(sApiRequest == null){
             sApiRequest = new BFRequest();
         }
@@ -49,6 +45,9 @@ public class BFRequest {
     }
 
     public static ApiService getApiService() {
+        if(!isInit){
+            throw new IllegalStateException("请先在Application里面调用BFRequest.init()初始化网络请求框架! ! ! ");
+        }
         return mApiService;
     }
 

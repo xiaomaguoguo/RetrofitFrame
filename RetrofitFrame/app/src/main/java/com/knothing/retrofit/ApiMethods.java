@@ -13,4 +13,7 @@ public interface ApiMethods {
     /**用户详情**/
     String USER_DETAIL = "user/detail";
 
+    /**用户所在的公司**/
+    String COMPANY = "com.bftv.userCompany";
+
 }

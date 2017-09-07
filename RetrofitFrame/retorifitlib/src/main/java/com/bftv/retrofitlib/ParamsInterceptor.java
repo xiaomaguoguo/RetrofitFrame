@@ -5,6 +5,8 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.baofengtv.middleware.tv.BFTVCommonManager;
+import com.baofengtv.middleware.tv.BFTVFactoryManager;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -93,7 +95,31 @@ public class ParamsInterceptor implements Interceptor {
     }
 
 
-
+    /**
+     * 在所有接口请求中统一配置通用参数,即：所有接口都会包含以下配置的参数
+     * @return
+     */
+    private Map<String, String> configCommonParams() {
+        HashMap<String,String> commonMap = new HashMap<>();
+        commonMap.put(CommonParams.APP_TOKEN, CommonParams.DEFAULT_APP_TOKEN);//apptoken
+        commonMap.put(CommonParams.API_VERSION_PARAMS, CommonParams.API_VERSION_VALUE);//version
+        commonMap.put(CommonParams.FORM, CommonParams.PLATE_FORM_TV);//from
+        try {
+            commonMap.put(CommonParams.VR_SUPPORT_PARAMS, isSupportVR() + "");
+            commonMap.put(CommonParams.PLATFORM, BFTVCommonManager.getInstance(context).getPlatform());//platform 平台（例MST_6A338、MST_6A639、AML_T866）
+            commonMap.put(CommonParams.SYS_VERSION, BFTVCommonManager.getInstance(context).getVersion());//sys_version 系统版本 (例 V1.0.24)
+            commonMap.put(CommonParams.SOFTID, BFTVCommonManager.getInstance(context).getSoftwareID());//softid 软件号（例11161301）
+            commonMap.put(CommonParams.REQUEST_PLATFORM, "tv");
+            commonMap.put(CommonParams.UUID, Build.SERIAL);//uuid
+            commonMap.put(CommonParams.SN, BFTVFactoryManager.getInstance(context).getSerialNumber());//uuid 号
+        }catch (Exception e){
+            e.printStackTrace();
+            if(isDebug){
+                Log.d(TAG,"BFTVCommonManager取参异常");
+            }
+        }
+        return commonMap;
+    }
 
     /**
      * 是否支持VR

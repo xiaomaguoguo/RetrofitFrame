@@ -22,4 +22,7 @@ public interface ApiService {
     @POST(ApiMethods.USER_DETAIL)
     Observable<UserInfo> userDetail(@FieldMap HashMap<String,String> params);
 
+    @GET("top250")
+    Observable<MovieEntity> getTopMovie(@Query("start") int start, @Query("count") int count);
+
 }
