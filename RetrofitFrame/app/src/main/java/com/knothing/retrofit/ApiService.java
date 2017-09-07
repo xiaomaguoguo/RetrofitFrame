@@ -2,6 +2,7 @@ package com.knothing.retrofit;
 
 import java.util.HashMap;
 
+import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -19,10 +20,14 @@ public interface ApiService {
     Observable<UserInfo> login(@Query("username") String username, @Query("password") String password);
 
     @FormUrlEncoded
+    @POST(ApiMethods.LOGIN)
+    Observable<UserInfo> postLogin(@Field("username") String username, @Field("password") String password);
+
+    @FormUrlEncoded
     @POST(ApiMethods.USER_DETAIL)
     Observable<UserInfo> userDetail(@FieldMap HashMap<String,String> params);
 
-    @GET("top250")
+    @GET(ApiMethods.TOP250)
     Observable<MovieEntity> getTopMovie(@Query("start") int start, @Query("count") int count);
 
 }
