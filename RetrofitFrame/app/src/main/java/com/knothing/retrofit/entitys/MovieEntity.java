@@ -1,4 +1,4 @@
-package com.knothing.retrofit;
+package com.knothing.retrofit.entitys;
 
 import java.util.List;
 

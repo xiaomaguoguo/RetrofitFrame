@@ -1,17 +1,18 @@
 package com.knothing.retrofit;
 
 import android.app.Activity;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import java.util.HashMap;
+import com.knothing.retrofit.api.ApiRequest;
+import com.knothing.retrofit.api.ApiTransformer;
+import com.knothing.retrofit.entitys.MovieEntity;
+import com.knothing.retrofit.entitys.UserInfo;
 
 import rx.Observable;
 import rx.Observer;
-import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -58,13 +59,31 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void ctrlButton1() {
-        Observable<MovieEntity> movieEntitys =  BFRequest.getApiService().getTopMovie(0,10).compose(MainActivity.this.<MovieEntity>applySchedulers());;
+        Observable<MovieEntity> movieEntitys =  ApiTransformer.getInstance().getTopMovie();
         movieEntitys/*.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())*/.subscribe(new Action1<MovieEntity>() {
             @Override
             public void call(MovieEntity movieEntity) {
                 Log.d(TAG,"请求结果 = " + movieEntity.toString());
             }
         });
+
+        /*movieEntitys.subscribe(new Observer<MovieEntity>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(MovieEntity movieEntity) {
+
+            }
+        });*/
+
     }
 
     private void ctrlButton() {
@@ -74,8 +93,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //                Observable.OnSubscribe<T> onSubscribe, Subscriber<T> subscriber
 
         //方式一：直接传递参数
-//        Observable<UserInfo> userInfoObservable1 = BFRequest.getApiService().postLogin("BFTV","1234567").compose(this.<UserInfo>applySchedulers());
-        Observable<UserInfo> userInfoObservable = BFRequest.getApiService().postLogin("BFTV","1234567")
+//        Observable<UserInfo> userInfoObservable1 = ApiRequest.getApiService().postLogin("BFTV","1234567").compose(this.<UserInfo>applySchedulers());
+        Observable<UserInfo> userInfoObservable = ApiRequest.getApiService().postLogin("BFTV","1234567")
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread());
 
@@ -139,7 +158,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //                HashMap<String,String> params = new HashMap<>();
 //                params.put("userId","user123");
 //                params.put("pwd","123456");
-//                Observable<UserInfo> userDetail = BFRequest.getApiService().userDetail(params)
+//                Observable<UserInfo> userDetail = ApiRequest.getApiService().userDetail(params)
 //                        .subscribeOn(Schedulers.io())
 //                        .observeOn(AndroidSchedulers.mainThread());
         // do you logic
@@ -155,17 +174,5 @@ public class MainActivity extends Activity implements View.OnClickListener {
             subscriptions = null;
         }
     }
-
-
-    private <T>Observable.Transformer<T, T> applySchedulers() {
-        return (Observable.Transformer<T, T>) transformer;
-    }
-
-    Observable.Transformer transformer = new Observable.Transformer(){
-        @Override
-        public Object call(Object observable) {
-            return ((Observable)observable).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
-        }
-    };
 
 }

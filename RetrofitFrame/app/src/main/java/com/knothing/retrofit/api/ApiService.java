@@ -1,4 +1,7 @@
-package com.knothing.retrofit;
+package com.knothing.retrofit.api;
+
+import com.knothing.retrofit.entitys.MovieEntity;
+import com.knothing.retrofit.entitys.UserInfo;
 
 import java.util.HashMap;
 

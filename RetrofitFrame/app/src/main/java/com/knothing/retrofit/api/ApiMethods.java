@@ -1,4 +1,4 @@
-package com.knothing.retrofit;
+package com.knothing.retrofit.api;
 
 /**
  * Created by MaZhihua on 2017/9/5.
@@ -15,5 +15,7 @@ public interface ApiMethods {
 
     /**用户所在的公司**/
     String COMPANY = "com.bftv.userCompany";
+
+    String TOP250 = "top250";
 
 }

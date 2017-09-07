@@ -1,8 +1,10 @@
 package com.knothing.retrofit;
 
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by MaZhihua on 2017/9/5.
@@ -49,5 +51,17 @@ public class Temp {
 
 
     }
+
+    <T> Observable.Transformer<T, T> applySchedulers() {
+        return (Observable.Transformer<T, T>) transformer;
+    }
+
+    Observable.Transformer transformer = new Observable.Transformer(){
+
+        @Override
+        public Object call(Object observable) {
+            return ((Observable)observable).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+        }
+    };
 
 }

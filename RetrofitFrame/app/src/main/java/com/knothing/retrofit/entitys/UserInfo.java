@@ -1,4 +1,4 @@
-package com.knothing.retrofit;
+package com.knothing.retrofit.entitys;
 
 /**
  * Created by MaZhihua on 2017/9/5.
