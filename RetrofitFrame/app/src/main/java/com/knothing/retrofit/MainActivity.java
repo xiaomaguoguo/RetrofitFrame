@@ -10,6 +10,7 @@ import android.widget.Button;
 import java.util.HashMap;
 
 import rx.Observable;
+import rx.Observer;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -43,11 +44,25 @@ public class MainActivity extends Activity {
 //                Observable.OnSubscribe<T> onSubscribe, Subscriber<T> subscriber
 
                 //方式一：直接传递参数
-                Observable<UserInfo> userInfoObservable = BFRequest.getApiService().login("BFTV","1234567")
+                Observable<UserInfo> userInfoObservable = BFRequest.getApiService().postLogin("BFTV","1234567")
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread());
+                subscriptions.add(userInfoObservable.subscribe(new Observer<UserInfo>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.i(TAG,"onCompleted()");
+                    }
 
-                subscriptions.add(userInfoObservable.subscribe());
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.i(TAG,"onError = " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(UserInfo userInfo) {
+                        Log.d(TAG,"onNext()");
+                    }
+                }));
 
 
 
@@ -82,12 +97,12 @@ public class MainActivity extends Activity {
                 // do you logic
 
                 //方式二：参数放到Map中
-                HashMap<String,String> params = new HashMap<>();
-                params.put("userId","user123");
-                params.put("pwd","123456");
-                Observable<UserInfo> userDetail = BFRequest.getApiService().userDetail(params)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread());
+//                HashMap<String,String> params = new HashMap<>();
+//                params.put("userId","user123");
+//                params.put("pwd","123456");
+//                Observable<UserInfo> userDetail = BFRequest.getApiService().userDetail(params)
+//                        .subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread());
                 // do you logic
 
             }
