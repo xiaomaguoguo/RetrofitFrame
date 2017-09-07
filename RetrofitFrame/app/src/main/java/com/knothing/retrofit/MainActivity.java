@@ -22,7 +22,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by MaZhihua on 2017/9/5.
  */
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements View.OnClickListener {
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
@@ -37,32 +37,71 @@ public class MainActivity extends Activity {
         setContentView(R.layout.main_activity);
         button = (Button) findViewById(R.id.button);
         button1 = (Button) findViewById(R.id.button1);
-        button.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(this);
+        button1.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+
+            case R.id.button:
+                ctrlButton();
+                break;
+
+
+            case R.id.button1:
+                ctrlButton1();
+                break;
+
+        }
+    }
+
+    private void ctrlButton1() {
+        Observable<MovieEntity> movieEntitys =  BFRequest.getApiService().getTopMovie(0,10).compose(MainActivity.this.<MovieEntity>applySchedulers());;
+        movieEntitys/*.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())*/.subscribe(new Action1<MovieEntity>() {
             @Override
-            public void onClick(View v) {
+            public void call(MovieEntity movieEntity) {
+                Log.d(TAG,"请求结果 = " + movieEntity.toString());
+            }
+        });
+    }
+
+    private void ctrlButton() {
+
+
 
 //                Observable.OnSubscribe<T> onSubscribe, Subscriber<T> subscriber
 
-                //方式一：直接传递参数
-                Observable<UserInfo> userInfoObservable = BFRequest.getApiService().postLogin("BFTV","1234567")
+        //方式一：直接传递参数
+//        Observable<UserInfo> userInfoObservable1 = BFRequest.getApiService().postLogin("BFTV","1234567").compose(this.<UserInfo>applySchedulers());
+        Observable<UserInfo> userInfoObservable = BFRequest.getApiService().postLogin("BFTV","1234567")
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread());
-                subscriptions.add(userInfoObservable.subscribe(new Observer<UserInfo>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.i(TAG,"onCompleted()");
-                    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.i(TAG,"onError = " + e.getMessage());
-                    }
 
-                    @Override
-                    public void onNext(UserInfo userInfo) {
-                        Log.d(TAG,"onNext()");
-                    }
-                }));
+        Subscription subscription = userInfoObservable.subscribe();
+        if(!subscription.isUnsubscribed()){
+            subscription.unsubscribe();
+        }
+
+
+        subscriptions.add(userInfoObservable.subscribe(new Observer<UserInfo>() {
+            @Override
+            public void onCompleted() {
+                Log.i(TAG,"onCompleted()");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i(TAG,"onError = " + e.getMessage());
+            }
+
+            @Override
+            public void onNext(UserInfo userInfo) {
+                Log.d(TAG,"onNext()");
+            }
+        }));
 
 
 
@@ -94,36 +133,19 @@ public class MainActivity extends Activity {
 
 
 
-                // do you logic
+        // do you logic
 
-                //方式二：参数放到Map中
+        //方式二：参数放到Map中
 //                HashMap<String,String> params = new HashMap<>();
 //                params.put("userId","user123");
 //                params.put("pwd","123456");
 //                Observable<UserInfo> userDetail = BFRequest.getApiService().userDetail(params)
 //                        .subscribeOn(Schedulers.io())
 //                        .observeOn(AndroidSchedulers.mainThread());
-                // do you logic
-
-            }
-        });
-
-
-
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Observable<MovieEntity> movieEntitys =  BFRequest.getApiService().getTopMovie(0,10);
-                movieEntitys.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<MovieEntity>() {
-                    @Override
-                    public void call(MovieEntity movieEntity) {
-                        Log.d(TAG,"请求结果 = " + movieEntity.toString());
-                    }
-                });
-            }
-        });
+        // do you logic
 
     }
+
 
     @Override
     protected void onDestroy() {
@@ -133,4 +155,17 @@ public class MainActivity extends Activity {
             subscriptions = null;
         }
     }
+
+
+    private <T>Observable.Transformer<T, T> applySchedulers() {
+        return (Observable.Transformer<T, T>) transformer;
+    }
+
+    Observable.Transformer transformer = new Observable.Transformer(){
+        @Override
+        public Object call(Object observable) {
+            return ((Observable)observable).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+        }
+    };
+
 }
