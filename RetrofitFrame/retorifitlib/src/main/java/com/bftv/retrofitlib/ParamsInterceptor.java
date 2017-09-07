@@ -62,7 +62,7 @@ public class ParamsInterceptor implements Interceptor {
             }
 
             //在请求参数中加入通用参数
-            for (Map.Entry<String, String> entry : configCommonParams().entrySet()) {
+            for (Map.Entry<String, String> entry : configCommonParams(paramsMap).entrySet()) {
                 newFormBody.add(entry.getKey(), entry.getValue());
             }
             requestBuilder.method(request.method(), newFormBody.build());
@@ -99,8 +99,11 @@ public class ParamsInterceptor implements Interceptor {
      * 在所有接口请求中统一配置通用参数,即：所有接口都会包含以下配置的参数
      * @return
      */
-    private Map<String, String> configCommonParams() {
+    private Map<String, String> configCommonParams(Map<String, String> paramsMap) {
         HashMap<String,String> commonMap = new HashMap<>();
+        if(paramsMap != null && !paramsMap.isEmpty()){
+            commonMap.putAll(paramsMap);
+        }
         commonMap.put(CommonParams.APP_TOKEN, CommonParams.DEFAULT_APP_TOKEN);//apptoken
         commonMap.put(CommonParams.API_VERSION_PARAMS, CommonParams.API_VERSION_VALUE);//version
         commonMap.put(CommonParams.FORM, CommonParams.PLATE_FORM_TV);//from
