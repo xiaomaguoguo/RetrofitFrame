@@ -46,7 +46,11 @@ public class BFRetrofit {
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(isDebug ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
+        interceptor.setLevel(isDebug ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
+        HttpLoggingInterceptor headerInterceptor = new HttpLoggingInterceptor();
+        headerInterceptor.setLevel(isDebug ? HttpLoggingInterceptor.Level.HEADERS : HttpLoggingInterceptor.Level.NONE);
         mOkHttpClient = new OkHttpClient.Builder()
+//                .addNetworkInterceptor(headerInterceptor)
                 .addInterceptor(interceptor)
                 .addInterceptor(new ParamsInterceptor(mContext,isDebug)) // 通用参数在这里注入
                 .retryOnConnectionFailure(true)
