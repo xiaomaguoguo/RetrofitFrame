@@ -17,6 +17,7 @@ import java.util.Map;
 import okhttp3.FormBody;
 import okhttp3.Interceptor;
 import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -40,6 +41,10 @@ public class ParamsInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
+
+        //如果请求头部需要统一，可以在这里处理统一逻辑
+//        ctrlRequestHeader(request);
+
         if (request.body() != null) {
             Request.Builder requestBuilder = request.newBuilder();
             FormBody.Builder newFormBody = new FormBody.Builder();
@@ -70,6 +75,21 @@ public class ParamsInterceptor implements Interceptor {
         }
 
         return convertResponseCode(chain.proceed(request));
+    }
+
+    /**
+     * 在这里统一所有请求的请求头
+     * @param request
+     */
+    private Request.Builder ctrlRequestHeader(Request request) {
+        if(request != null){
+            return request.newBuilder()
+            .addHeader("mac", "f8:00:ea:10:45")
+            .addHeader("uuid", "gdeflatfgfg5454545e")
+            .addHeader("userId", "Fea2405144")
+            .addHeader("netWork", "wifi");
+        }
+        return null;
     }
 
 
