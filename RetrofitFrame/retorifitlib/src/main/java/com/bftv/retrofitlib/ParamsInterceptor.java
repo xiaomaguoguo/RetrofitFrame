@@ -7,9 +7,10 @@ import android.util.Log;
 
 import com.baofengtv.middleware.tv.BFTVCommonManager;
 import com.baofengtv.middleware.tv.BFTVFactoryManager;
+import com.bftv.retrofitlib.utils.MacUtils;
+import com.bftv.retrofitlib.utils.Utils;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,6 @@ import java.util.Map;
 import okhttp3.FormBody;
 import okhttp3.Interceptor;
 import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -124,11 +124,16 @@ public class ParamsInterceptor implements Interceptor {
         if(paramsMap != null && !paramsMap.isEmpty()){
             commonMap.putAll(paramsMap);
         }
+//        commonMap.put(CommonParams.API_VERSION_PARAMS, CommonParams.API_VERSION_VALUE);//version
         commonMap.put(CommonParams.APP_TOKEN, CommonParams.DEFAULT_APP_TOKEN);//apptoken
-        commonMap.put(CommonParams.API_VERSION_PARAMS, CommonParams.API_VERSION_VALUE);//version
         commonMap.put(CommonParams.FORM, CommonParams.PLATE_FORM_TV);//from
+        commonMap.put(CommonParams.VERSION_CODE, Utils.getVersionCode(context));
+        commonMap.put(CommonParams.VERSION_NAME,Utils.getVersionName(context));
+        commonMap.put(CommonParams.SCREEN_PIXEL,Utils.getScreenPixel(context));
         try {
-            commonMap.put(CommonParams.VR_SUPPORT_PARAMS, isSupportVR() + "");
+            commonMap.put(CommonParams.MAC_ADDRESS, MacUtils.getLocalMacAddressFromBusybox());
+            commonMap.put(CommonParams.PACKAGE_NAME,context.getPackageName());
+            commonMap.put(CommonParams.VR_SUPPORT_PARAMS, Utils.isSupportVR() + "");
             commonMap.put(CommonParams.PLATFORM, BFTVCommonManager.getInstance(context).getPlatform());//platform 平台（例MST_6A338、MST_6A639、AML_T866）
             commonMap.put(CommonParams.SYS_VERSION, BFTVCommonManager.getInstance(context).getVersion());//sys_version 系统版本 (例 V1.0.24)
             commonMap.put(CommonParams.SOFTID, BFTVCommonManager.getInstance(context).getSoftwareID());//softid 软件号（例11161301）
@@ -144,23 +149,4 @@ public class ParamsInterceptor implements Interceptor {
         return commonMap;
     }
 
-    /**
-     * 是否支持VR
-     * @return 0 不支持
-     *         1 支持
-     */
-    public static int isSupportVR(){
-        int vr_support = 0;
-        try {
-            Method getMethod = Class.forName("android.os.SystemProperties").getMethod("get", String.class, String.class);
-            String str = (String) (getMethod.invoke(null, "baofengtv.en.VR", "false"));
-            if("true".equals(str)){
-                return 1;
-            }
-            return vr_support;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return vr_support;
-    }
 }
