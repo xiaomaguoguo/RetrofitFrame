@@ -24,4 +24,26 @@ public class BaseApiTransformer {
     };
 
 
+    /**
+     * 跟compose()配合使用,比如ObservableUtils.wrap(obj).compose(toMain())
+     * @param <T>
+     * @return
+
+    public static <T> ObservableTransformer<T, T> applySchedulers2() {
+
+        return new ObservableTransformer<T, T>() {
+
+            @Override
+            public ObservableSource<T> apply(Observable<T> upstream) {
+                return upstream.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());
+            }
+        };
+    }
+
+    protected static ObservableTransformer transformer2 = new ObservableTransformer(){
+
+    }*/
+
+
 }
