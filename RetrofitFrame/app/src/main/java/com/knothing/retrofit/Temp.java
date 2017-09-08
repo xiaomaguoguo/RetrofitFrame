@@ -12,7 +12,12 @@ import rx.schedulers.Schedulers;
 
 public class Temp {
 
+    public static final String HASH = "KNOTHING";
+
     public static void main(String[] args){
+
+        System.out.println("HASH Values = " + HASH.hashCode());
+
         Observable<String> test = Observable.just("ABC","DEF");
         test.subscribe(new Action1<String>() {
             @Override
