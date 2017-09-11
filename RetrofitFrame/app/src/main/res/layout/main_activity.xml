@@ -14,4 +14,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="豆瓣请求" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Post传递Map参数" />
 </LinearLayout>

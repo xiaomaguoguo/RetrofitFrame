@@ -1,15 +1,14 @@
 package com.knothing.retrofit;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+
+import io.reactivex.Observable;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 /**
  * Created by MaZhihua on 2017/9/5.
  */
-
 public class Temp {
 
     public static final String HASH = "KNOTHING";
@@ -19,9 +18,9 @@ public class Temp {
         System.out.println("HASH Values = " + HASH.hashCode());
 
         Observable<String> test = Observable.just("ABC","DEF");
-        test.subscribe(new Action1<String>() {
+        test.subscribe(new Consumer<String>() {
             @Override
-            public void call(String s) {
+            public void accept(@NonNull String s) throws Exception {
                 System.out.println("s = " + s);
             }
         });
@@ -38,35 +37,18 @@ public class Temp {
             }
         });*/
 
-        test.map(new Func1<String, String>() {
+        test.map(new Function<String, String>() {
             @Override
-            public String call(String s) {
+            public String apply(@NonNull String s) throws Exception {
                 return s;
             }
-        }).subscribe(new Action1<String>() {
+        }).subscribe(new Consumer<String>() {
             @Override
-            public void call(String s) {
+            public void accept(@NonNull String s) throws Exception {
                 System.out.println("s2 = " + s);
             }
         });
 
-
-
-
-
-
     }
-
-    <T> Observable.Transformer<T, T> applySchedulers() {
-        return (Observable.Transformer<T, T>) transformer;
-    }
-
-    Observable.Transformer transformer = new Observable.Transformer(){
-
-        @Override
-        public Object call(Object observable) {
-            return ((Observable)observable).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
-        }
-    };
 
 }

@@ -1,49 +1,31 @@
 package com.bftv.retrofitlib;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by MaZhihua on 2017/9/7.
- * 转换基础类，以后有需求可以在这里统一对所有接口请求做统一处理
+ * 线程转换基础类，以后有需求可以在这里统一对所有接口请求做统一处理
  */
 public class BaseApiTransformer {
 
-    /***这两个函数不要修改****/
-    protected static <T> Observable.Transformer<T, T> applySchedulers() {
-        return (Observable.Transformer<T, T>) transformer;
-    }
-
-    /***这两个函数不要修改****/
-    protected static Observable.Transformer transformer = new Observable.Transformer(){
-        @Override
-        public Object call(Object observable) {
-            return ((Observable)observable).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
-        }
-    };
-
-
     /**
-     * 跟compose()配合使用,比如ObservableUtils.wrap(obj).compose(toMain())
      * @param <T>
      * @return
-
+     */
     public static <T> ObservableTransformer<T, T> applySchedulers2() {
-
-        return new ObservableTransformer<T, T>() {
-
-            @Override
-            public ObservableSource<T> apply(Observable<T> upstream) {
-                return upstream.subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread());
-            }
-        };
-    }
+        return (ObservableTransformer<T,T>) transformer2;
+    };
 
     protected static ObservableTransformer transformer2 = new ObservableTransformer(){
-
-    }*/
+        @Override
+        public ObservableSource apply(io.reactivex.Observable upstream) {
+            return upstream.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        }
+    };
 
 
 }

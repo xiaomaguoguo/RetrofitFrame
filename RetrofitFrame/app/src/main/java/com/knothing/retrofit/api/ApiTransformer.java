@@ -1,10 +1,13 @@
 package com.knothing.retrofit.api;
 
 import com.bftv.retrofitlib.BaseApiTransformer;
+import com.bftv.retrofitlib.CommonParams;
 import com.knothing.retrofit.entitys.MovieEntity;
 import com.knothing.retrofit.entitys.UserInfo;
 
-import rx.Observable;
+import java.util.HashMap;
+
+import io.reactivex.Observable;
 
 /**
  * Created by MaZhihua on 2017/9/7.
@@ -24,15 +27,20 @@ public class ApiTransformer extends BaseApiTransformer {
     }
 
 
-    //请求一
+    //GET请求
     public Observable<MovieEntity> getTopMovie(){
-        return ApiRequest.getApiService().getTopMovie(0,10).compose(this.<MovieEntity>applySchedulers());
+        return ApiRequest.getApiService().getTopMovie(0,10).compose(this.<MovieEntity>applySchedulers2());
     }
 
 
-    //请求二
-    public Observable<UserInfo> getMethod2(String username, String possword){
-        return ApiRequest.getApiService().postLogin(username,possword).compose(this.<UserInfo>applySchedulers());
+    //POST请求,直接传递参数
+    public Observable<UserInfo> postLogin(String username, String possword){
+        return ApiRequest.getApiService().postLogin("http://www.baidu.com",username,possword).compose(this.<UserInfo>applySchedulers2());
+    }
+
+    //POST请求,直接传递参数
+    public Observable<UserInfo> userDetail(HashMap<String,String> params){
+        return ApiRequest.getApiService().userDetail(params).compose(this.<UserInfo>applySchedulers2());
     }
 
 }

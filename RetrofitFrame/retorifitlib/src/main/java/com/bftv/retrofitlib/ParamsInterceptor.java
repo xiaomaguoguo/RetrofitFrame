@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.FormBody;
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.MultipartBody;
 import okhttp3.Request;
@@ -41,6 +42,10 @@ public class ParamsInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
+        String host = request.url().host();
+        if(isDebug){
+            Log.d(TAG,"请求host = " + host);
+        }
 
         //如果请求头部需要统一，可以在这里处理统一逻辑
 //        ctrlRequestHeader(request);
@@ -66,9 +71,11 @@ public class ParamsInterceptor implements Interceptor {
 
             }
 
-            //在请求参数中加入通用参数
-            for (Map.Entry<String, String> entry : configCommonParams(paramsMap).entrySet()) {
-                newFormBody.add(entry.getKey(), entry.getValue());
+            //在请求参数中加入通用参数，且：只有是公司host是才注入，第三方服务器请求，不注入通用参数
+            if(!TextUtils.isEmpty(host) && (host.contains(CommonParams.API_REQUEST_BASE_URL_FORMAL) || host.contains(CommonParams.API_REQUEST_BASE_URL_TEST))){
+                for (Map.Entry<String, String> entry : configCommonParams(paramsMap).entrySet()) {
+                    newFormBody.add(entry.getKey(), entry.getValue());
+                }
             }
             requestBuilder.method(request.method(), newFormBody.build());
             return convertResponseCode(chain.proceed(requestBuilder.build()));

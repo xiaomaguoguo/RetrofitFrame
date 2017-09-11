@@ -16,6 +16,8 @@ public interface ApiMethods {
     /**用户所在的公司**/
     String COMPANY = "com.bftv.userCompany";
 
-    String TOP250 = "top250";
+    String TOP250 = "https://api.douban.com/v2/movie/top250";
+
+    String TOP2502 = "top250";
 
 }

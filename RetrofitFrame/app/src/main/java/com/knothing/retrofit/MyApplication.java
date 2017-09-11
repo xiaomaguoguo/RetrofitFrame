@@ -16,7 +16,7 @@ public class MyApplication extends Application {
         super.onCreate();
 
         //初始化网络请求
-//        ApiRequest.getInstance().init(getApplicationContext(),true);
-        ApiRequest.getInstance().init(getApplicationContext(),CommonParams.TEST_BASEURL,true);
+        ApiRequest.getInstance().init(getApplicationContext(),true);
+//        ApiRequest.getInstance().init(getApplicationContext(),CommonParams.TEST_BASEURL,true);
     }
 }

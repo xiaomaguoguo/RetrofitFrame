@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -62,7 +62,7 @@ public class BFRetrofit {
                 .client(mOkHttpClient)
                 .baseUrl(!TextUtils.isEmpty(baseUrl) ? baseUrl : (isDebug ? CommonParams.API_REQUEST_BASE_URL_TEST : CommonParams.API_REQUEST_BASE_URL_FORMAL))
                 .addConverterFactory(GsonConverterFactory.create(gson)) //gson convert
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create()) //support rxjava
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) //support rxjava
                 .build();
         return this;
 
