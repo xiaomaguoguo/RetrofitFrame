@@ -14,7 +14,7 @@ public abstract class ApiObserver<T> implements Observer<T> {
 
     @Override
     public void onSubscribe(@NonNull Disposable d) {
-
+        onStart();
     }
 
     @Override
@@ -29,13 +29,21 @@ public abstract class ApiObserver<T> implements Observer<T> {
 
     @Override
     public void onComplete() {
+        onCompleted();
+    }
+
+    public void onStart(){
 
     }
 
-    protected abstract void onSuccess(@NonNull T t);
 
     public void onFailed(Throwable e){
 
     }
 
+    public void onCompleted(){
+
+    }
+
+    protected abstract void onSuccess(@NonNull T t);
 }
