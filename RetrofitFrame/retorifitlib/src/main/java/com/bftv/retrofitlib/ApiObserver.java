@@ -12,9 +12,11 @@ import io.reactivex.functions.Consumer;
  */
 public abstract class ApiObserver<T> implements Observer<T> {
 
+
+
     @Override
     public void onSubscribe(@NonNull Disposable d) {
-        onStart();
+        onStart(d);
     }
 
     @Override
@@ -32,7 +34,7 @@ public abstract class ApiObserver<T> implements Observer<T> {
         onCompleted();
     }
 
-    public void onStart(){
+    public void onStart(Disposable d){
 
     }
 
