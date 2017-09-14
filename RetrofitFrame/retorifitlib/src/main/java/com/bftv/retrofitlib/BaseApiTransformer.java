@@ -15,11 +15,11 @@ public class BaseApiTransformer {
      * @param <T>
      * @return
      */
-    public static <T> ObservableTransformer<T, T> applySchedulers2() {
-        return (ObservableTransformer<T,T>) transformer2;
+    public static <T> ObservableTransformer<T, T> convertObservable() {
+        return (ObservableTransformer<T,T>) transformer;
     };
 
-    protected static ObservableTransformer transformer2 = new ObservableTransformer(){
+    protected static ObservableTransformer transformer = new ObservableTransformer(){
         @Override
         public ObservableSource apply(io.reactivex.Observable upstream) {
             return upstream.subscribeOn(Schedulers.io())
