@@ -42,9 +42,10 @@ public class ParamsInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
+//        HttpUrl.Builder urlBuilder = request.url().newBuilder();
         String host = request.url().host();
         if(isDebug){
-            Log.d(TAG,"请求host = " + host + "; method = " + request.method() + "; interface = " + request.toString());
+            Log.d(TAG,"请求接口 = " + host + "; interface = " + request.toString());
         }
 
         //如果请求头部需要统一，可以在这里处理统一逻辑
