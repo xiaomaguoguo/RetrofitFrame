@@ -44,7 +44,7 @@ public class ParamsInterceptor implements Interceptor {
         Request request = chain.request();
         String host = request.url().host();
         if(isDebug){
-            Log.d(TAG,"请求host = " + host);
+            Log.d(TAG,"请求host = " + host + "; method = " + request.method());
         }
 
         //如果请求头部需要统一，可以在这里处理统一逻辑
