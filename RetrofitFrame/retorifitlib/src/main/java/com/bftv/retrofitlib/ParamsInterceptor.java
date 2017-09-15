@@ -44,7 +44,7 @@ public class ParamsInterceptor implements Interceptor {
         Request request = chain.request();
         String host = request.url().host();
         if(isDebug){
-            Log.d(TAG,"请求host = " + host + "; method = " + request.method() + "; interface = " + chain.toString());
+            Log.d(TAG,"请求host = " + host + "; method = " + request.method() + "; interface = " + request.toString());
         }
 
         //如果请求头部需要统一，可以在这里处理统一逻辑
@@ -72,7 +72,7 @@ public class ParamsInterceptor implements Interceptor {
             }
 
             //在请求参数中加入通用参数，且：只有是公司host是才注入，第三方服务器请求，不注入通用参数
-            if(!TextUtils.isEmpty(host) && (host.contains(CommonParams.API_REQUEST_BASE_URL_FORMAL) || host.contains(CommonParams.API_REQUEST_BASE_URL_TEST))){
+            if(!TextUtils.isEmpty(host) && (CommonParams.API_REQUEST_BASE_URL_FORMAL.contains(host) || CommonParams.API_REQUEST_BASE_URL_TEST.contains(host))){
                 for (Map.Entry<String, String> entry : configCommonParams(paramsMap).entrySet()) {
                     newFormBody.add(entry.getKey(), entry.getValue());
                 }
